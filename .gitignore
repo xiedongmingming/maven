@@ -1,0 +1,21 @@
+# temp and output files
+
+*.swp
+*.swo
+target/
+
+# ide related files
+
+*.iml
+*.ipr
+*.iws
+.idea/
+.classpath
+.project
+.settings/
+nbproject/
+nbactions.xml
+
+# mac os related files
+
+# logs files
