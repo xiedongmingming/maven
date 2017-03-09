@@ -1,0 +1,110 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  	<modelVersion>4.0.0</modelVersion>
+
+	<!-- 声明父模块(POM继承) -->
+	<parent>
+		<!-- 指定父模块的坐标 -->
+		<groupId>com.juvenxu.mvnbook.account</groupId>
+		<artifactId>account-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<!-- 表示父模块POM的相对路径:当项目构建时MAVEN会首先根据RELATIVEPATH检查父POM如果找不到再从本地仓库查找(默认:../pom.xml) -->
+		<relativePath>../account-parent/pom.xml</relativePath>
+	</parent>
+
+  	<artifactId>account-persist</artifactId>
+  	<name>Account Persist</name>
+  	<version>1.0.0</version>
+
+	<properties>
+		<dom4j.version>1.6.1</dom4j.version>
+	</properties>
+	
+	<dependencies>
+
+		<!-- 用来支持XML操作的 -->
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>${dom4j.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+
+	</dependencies>
+	
+	<build>
+
+		<!-- 这是为了开启资源过滤 -->
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+		
+		<!-- MAVEN是允许自定义源码目录的
+			<sourceDirectory>src/java</sourceDirectory>	
+		-->	
+		<plugins>
+
+			<!-- 配置使用UTF-8编码处理资源文件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			
+			<!-- 下面的两个能够完全移除????? -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+
+		</plugins>
+		
+	</build>
+	
+	<!-- 必须在POM中:用于项目构件的发布(分发构件至远程仓库) -->
+	<distributionManagement>
+		<!-- 发布到快照版本的仓库(即测试版本仓库) -->
+		<snapshotRepository>
+			<id>snapshots</id>
+			<!-- 关键是地址 -->
+			<url>http://localhost:8082/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<!-- 发布到发行版本的仓库中(也可以发布到THIRDPARTY仓库) -->
+		<repository>
+			<id>releases</id>
+			<!-- 关键是地址 -->
+			<url>http://localhost:8082/nexus/content/repositories/releases</url>
+		</repository>
+	</distributionManagement>
+	
+</project>

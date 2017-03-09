@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<!-- 该BEAN用来帮助载入PROPERTIES文件的组件 -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<!-- 下面表示从CLASSPATH根路径下载入指定文件名文件中的属性: service.properties -->
+		<property name="location" value="classpath:service.properties"/>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
+
+	<!-- 这里需要定义邮件服务器的一些配置:包括协议、端口、主机、用户名、密码、是否需要认证等属性 -->
+	<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<!-- 这段配置还使用了SPRINGFRAMEWORK的属性引用(属性值由上面BEAN产生) -->
+		<property name="protocol" value="${email.protocol}"/>
+		
+		<property name="host" value="${email.host}"/>
+		<property name="port" value="${email.port}"/>
+		
+		<property name="username" value="${email.username}"/>
+		<property name="password" value="${email.password}"/>
+		
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.${email.protocol}.auth">${email.auth}</prop>
+				<prop key="mail.${email.protocol}.timeout">25000</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 定义接口实现类:其中的成员为上面的BEAN -->
+	<bean id="accountEmailService" class="com.juvenxu.mvnbook.account.email.AccountEmailServiceImpl">
+		<property name="javaMailSender" ref="javaMailSender" />
+		<property name="systemEmail" value="${email.systemEmail}" />
+	</bean>
+</beans>
